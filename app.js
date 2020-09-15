@@ -5,7 +5,11 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-mongoose.connect("mongodb://localhost/another-meme-browser-db");
+// Connect to MongoDB via mongoose ORM
+mongoose.connect("mongodb://localhost/another-meme-browser-db", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 mongoose.connection.once("open", () => {
   console.log("connected to database");
 });
