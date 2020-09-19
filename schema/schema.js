@@ -14,6 +14,23 @@ const {
   GraphQLNonNull,
 } = graphql;
 
+const UserType = new GraphQLObjectType({
+  name: "User",
+  fields: () => ({
+    id: { type: GraphQLID },
+    login: { type: GraphQLString },
+    password: { type: GraphQLString },
+    nickname: { type: GraphQLString },
+    email: { type: GraphQLString },
+  }),
+  memes: {
+    type: MemeType,
+    resolve(parent, args) {
+      return Meme.find({ userId: parent.id });
+    },
+  },
+});
+
 const BookType = new GraphQLObjectType({
   name: "Book",
   fields: () => ({
