@@ -8,6 +8,5 @@ const userSchema = new Schema({
   email: String,
 });
 
-const User = mongoose.model("User", userSchema); // Dlaczego z takim exportem nie widzi funkcji Authorfind({})????????
-
+const User = mongoose.model("User", userSchema);
 module.exports = User;
