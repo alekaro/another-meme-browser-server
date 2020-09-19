@@ -7,3 +7,6 @@ const authorSchema = new Schema({
 });
 
 module.exports = mongoose.model("Author", authorSchema);
+// const Author = mongoose.model("Author", authorSchema); // Dlaczego z takim exportem nie widzi funkcji Authorfind({})????????
+
+// module.exports = { Author };
