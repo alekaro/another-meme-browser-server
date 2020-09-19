@@ -4,6 +4,7 @@ const Book = require("../models/book");
 const Author = require("../models/author");
 
 const graphql = require("graphql");
+const User = require("../models/user");
 
 const {
   GraphQLObjectType,
@@ -29,6 +30,19 @@ const UserType = new GraphQLObjectType({
       return Meme.find({ userId: parent.id });
     },
   },
+});
+
+const MemeType = new GraphQLObjectType({
+  name: "Meme",
+  fields: () => ({
+    id: { type: GraphQLID },
+    title: { type: GraphQLString },
+    content: { type: GraphQLString },
+    user: {
+      type: User,
+      resolve(parent, args) {},
+    },
+  }),
 });
 
 const BookType = new GraphQLObjectType({
