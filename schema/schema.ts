@@ -25,7 +25,7 @@ const UserType = new GraphQLObjectType({
     email: { type: GraphQLString },
     memes: {
       type: new GraphQLList(MemeType),
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return Meme.find({ userId: parent.id });
       },
     },
@@ -40,13 +40,13 @@ const MemeType = new GraphQLObjectType({
     content: { type: GraphQLString },
     user: {
       type: UserType,
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return User.findById(parent.userId);
       },
     },
     comments: {
       type: new GraphQLList(MemeCommentType),
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return MemeComment.find({ memeId: parent.id });
       },
     },
@@ -60,13 +60,13 @@ const MemeCommentType = new GraphQLObjectType({
     content: { type: GraphQLString },
     user: {
       type: UserType,
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return User.findById(parent.userId);
       },
     },
     meme: {
       type: MemeType,
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return Meme.findById(parent.memeId);
       },
     },
@@ -79,55 +79,55 @@ const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return User.findById(args.id);
       },
     },
     users: {
       type: new GraphQLList(UserType),
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return User.find({});
       },
     },
     meme: {
       type: MemeType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return Meme.findById(args.id);
       },
     },
     memes: {
       type: new GraphQLList(MemeType),
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return Meme.find({});
       },
     },
     memeComment: {
       type: MemeCommentType,
       args: { id: { type: GraphQLID } },
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         return MemeComment.findById(args.id);
       },
     },
     memeCommentsByMeme: {
       type: new GraphQLList(MemeCommentType),
       args: { memeId: { type: GraphQLID } },
-      resolve(parent, args) {
-        return MemeComment.find({ memeId: memeId });
+      resolve(parent: any, args: any) {
+        return MemeComment.find({ memeId: args.memeId });
       },
     },
     memeCommentsByUser: {
       type: new GraphQLList(MemeCommentType),
       args: { userId: { type: GraphQLID } },
-      resolve(parent, args) {
-        return MemeComment.find({ userId: userId });
+      resolve(parent: any, args: any) {
+        return MemeComment.find({ userId: args.userId });
       },
     },
     memeCommentsByMemeAndUser: {
       type: new GraphQLList(MemeCommentType),
       args: { memeId: { type: GraphQLID }, userId: { type: GraphQLID } },
-      resolve(parent, args) {
-        return MemeComment.find({ memeId: memeId, userId: userId });
+      resolve(parent: any, args: any) {
+        return MemeComment.find({ memeId: args.memeId, userId: args.userId });
       },
     },
   },
@@ -144,7 +144,7 @@ const Mutation = new GraphQLObjectType({
         email: { type: new GraphQLNonNull(GraphQLString) },
         nickname: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         let user = new User({
           login: args.login,
           password: args.password,
@@ -161,7 +161,7 @@ const Mutation = new GraphQLObjectType({
         title: { type: new GraphQLNonNull(GraphQLString) },
         content: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve(parent, args) {
+      resolve(parent: any, args: any) {
         let meme = new Meme({
           title: args.title,
           content: args.content,
