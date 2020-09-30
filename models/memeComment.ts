@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const memeCommentSchema = new mongoose.Schema({
   userId: String, // Author of the comment
   memeId: String, // Meme commented
