@@ -4,7 +4,6 @@ const _ = require("lodash");
 const graphql = require("graphql");
 const User = require("../models/user");
 const Meme = require("../models/meme");
-const MemeComment = require("../models/memeComment");
 
 const {
   GraphQLObjectType,
@@ -45,16 +44,13 @@ const MemeType = new GraphQLObjectType({
       },
     },
     comments: {
-      type: new GraphQLList(MemeCommentType),
-      resolve(parent: any, args: any) {
-        return MemeComment.find({ memeId: parent.id });
-      },
+      type: new GraphQLList(CommentType),
     },
   }),
 });
 
-const MemeCommentType = new GraphQLObjectType({
-  name: "MemeComment",
+const CommentType = new GraphQLObjectType({
+  name: "Comment",
   fields: () => ({
     id: { type: GraphQLID },
     content: { type: GraphQLString },
@@ -62,12 +58,6 @@ const MemeCommentType = new GraphQLObjectType({
       type: UserType,
       resolve(parent: any, args: any) {
         return User.findById(parent.userId);
-      },
-    },
-    meme: {
-      type: MemeType,
-      resolve(parent: any, args: any) {
-        return Meme.findById(parent.memeId);
       },
     },
   }),
@@ -102,34 +92,34 @@ const RootQuery = new GraphQLObjectType({
         return Meme.find({});
       },
     },
-    memeComment: {
-      type: MemeCommentType,
-      args: { id: { type: GraphQLID } },
-      resolve(parent: any, args: any) {
-        return MemeComment.findById(args.id);
-      },
-    },
-    memeCommentsByMeme: {
-      type: new GraphQLList(MemeCommentType),
-      args: { memeId: { type: GraphQLID } },
-      resolve(parent: any, args: any) {
-        return MemeComment.find({ memeId: args.memeId });
-      },
-    },
-    memeCommentsByUser: {
-      type: new GraphQLList(MemeCommentType),
-      args: { userId: { type: GraphQLID } },
-      resolve(parent: any, args: any) {
-        return MemeComment.find({ userId: args.userId });
-      },
-    },
-    memeCommentsByMemeAndUser: {
-      type: new GraphQLList(MemeCommentType),
-      args: { memeId: { type: GraphQLID }, userId: { type: GraphQLID } },
-      resolve(parent: any, args: any) {
-        return MemeComment.find({ memeId: args.memeId, userId: args.userId });
-      },
-    },
+    // memeComment: {
+    //   type: MemeCommentType,
+    //   args: { id: { type: GraphQLID } },
+    //   resolve(parent: any, args: any) {
+    //     return MemeComment.findById(args.id);
+    //   },
+    // },
+    // memeCommentsByMeme: {
+    //   type: new GraphQLList(MemeCommentType),
+    //   args: { memeId: { type: GraphQLID } },
+    //   resolve(parent: any, args: any) {
+    //     return MemeComment.find({ memeId: args.memeId });
+    //   },
+    // },
+    // memeCommentsByUser: {
+    //   type: new GraphQLList(MemeCommentType),
+    //   args: { userId: { type: GraphQLID } },
+    //   resolve(parent: any, args: any) {
+    //     return MemeComment.find({ userId: args.userId });
+    //   },
+    // },
+    // memeCommentsByMemeAndUser: {
+    //   type: new GraphQLList(MemeCommentType),
+    //   args: { memeId: { type: GraphQLID }, userId: { type: GraphQLID } },
+    //   resolve(parent: any, args: any) {
+    //     return MemeComment.find({ memeId: args.memeId, userId: args.userId });
+    //   },
+    // },
   },
 });
 
@@ -166,7 +156,23 @@ const Mutation = new GraphQLObjectType({
           title: args.title,
           content: args.content,
           userId: args.userId,
+          comments: args.comments,
         });
+        return meme.save();
+      },
+    },
+    addComment: {
+      type: CommentType,
+      args: {
+        memeId: { type: new GraphQLNonNull(GraphQLID) },
+        userId: { type: new GraphQLNonNull(GraphQLID) },
+        content: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent: any, args: any) {
+        let meme = Meme.find({ memeId: args.memeId });
+
+        meme.comments.push(new Comment());
+
         return meme.save();
       },
     },

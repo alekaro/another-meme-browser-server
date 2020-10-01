@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema({
   content: String,
 });
 
-module.exports = mongoose.model("Comment", commentSchema);
-
+const Comment = mongoose.model("Comment", commentSchema);
+module.exports = { Comment };
 // async await ma promise'y
 // co to są promise'y
